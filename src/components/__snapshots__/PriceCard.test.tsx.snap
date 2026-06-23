@@ -30,7 +30,7 @@ exports[`snapshots > default 1`] = `
   >
     <span>
       Updated 
-      22842h ago
+      5m ago
     </span>
     <span
       class="text-cyan-600 dark:text-cyan-400"
@@ -117,7 +117,7 @@ exports[`snapshots > hasAlert 1`] = `
   >
     <span>
       Updated 
-      22842h ago
+      5m ago
     </span>
     <span
       class="text-cyan-600 dark:text-cyan-400"
@@ -204,7 +204,7 @@ exports[`snapshots > isLive 1`] = `
   >
     <span>
       Updated 
-      22842h ago
+      5m ago
     </span>
     <span
       class="text-cyan-600 dark:text-cyan-400"
@@ -285,7 +285,7 @@ exports[`snapshots > isStale 1`] = `
   >
     <span>
       Updated 
-      22842h ago
+      5m ago
     </span>
     <span
       class="text-cyan-600 dark:text-cyan-400"

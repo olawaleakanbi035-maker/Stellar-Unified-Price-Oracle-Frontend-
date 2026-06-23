@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from 'vitest'
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
 import { cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { PriceCard } from './PriceCard'
@@ -124,6 +124,15 @@ describe('PriceCard', () => {
 })
 
 describe('snapshots', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(1700000000000 + 1000 * 60 * 5)) // 5 minutes later
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   const fixedPrice = {
     assetPair: 'BTC/USD',
     price: 50000.1234,
