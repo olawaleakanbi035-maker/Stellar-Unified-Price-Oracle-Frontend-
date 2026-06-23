@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useState, useEffect } from 'react'
 import {
   AreaChart,
   Area,
@@ -17,13 +17,18 @@ interface PriceChartProps {
   loading?: boolean
 }
 
-// Detect current theme from the html element class
-function isDarkMode() {
-  return document.documentElement.classList.contains('dark')
-}
-
 export const PriceChart = memo(function PriceChart({ data, pair, loading }: PriceChartProps) {
-  const dark = isDarkMode()
+  const [dark, setDark] = useState(() =>
+    document.documentElement.classList.contains('dark'),
+  )
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setDark(document.documentElement.classList.contains('dark'))
+    })
+    observer.observe(document.documentElement, { attributeFilter: ['class'] })
+    return () => observer.disconnect()
+  }, [])
 
   const colors = {
     gridStroke: dark ? '#1f2937' : '#e5e7eb',

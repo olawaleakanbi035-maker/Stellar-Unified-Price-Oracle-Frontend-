@@ -11,7 +11,11 @@ function getInitialTheme(): Theme {
   } catch {
     // localStorage unavailable
   }
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  try {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  } catch {
+    return 'dark'
+  }
 }
 
 export function useTheme() {
