@@ -311,3 +311,77 @@ describe('Dashboard', () => {
     expect(badge).toBeInTheDocument()
   })
 })
+
+describe('snapshots', () => {
+  it('loading', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>,
+    )
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('error', async () => {
+    const { usePriceContext } = await import('../context/PriceContext')
+    vi.mocked(usePriceContext).mockReturnValue({
+      prices: [],
+      pricesLoading: false,
+      pricesError: 'Failed to fetch prices',
+      pricesValidating: false,
+      livePrices: new Map(),
+      wsStatus: 'disconnected',
+      refetchPrices: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
+    })
+    const { container } = render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>,
+    )
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('empty', async () => {
+    const { usePriceContext } = await import('../context/PriceContext')
+    vi.mocked(usePriceContext).mockReturnValue({
+      prices: [],
+      pricesLoading: false,
+      pricesError: null,
+      pricesValidating: false,
+      livePrices: new Map(),
+      wsStatus: 'disconnected',
+      refetchPrices: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
+    })
+    const { container } = render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>,
+    )
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('with data', async () => {
+    const { usePriceContext } = await import('../context/PriceContext')
+    vi.mocked(usePriceContext).mockReturnValue({
+      prices: mockPrices,
+      pricesLoading: false,
+      pricesError: null,
+      pricesValidating: false,
+      livePrices: new Map(),
+      wsStatus: 'disconnected',
+      refetchPrices: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
+    })
+    const { container } = render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>,
+    )
+    expect(container.firstChild).toMatchSnapshot()
+  })
+})

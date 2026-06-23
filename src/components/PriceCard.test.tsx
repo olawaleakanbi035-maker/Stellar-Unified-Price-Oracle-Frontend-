@@ -122,3 +122,33 @@ describe('PriceCard', () => {
     expect(card?.className).not.toContain('opacity-60')
   })
 })
+
+describe('snapshots', () => {
+  const fixedPrice = {
+    assetPair: 'BTC/USD',
+    price: 50000.1234,
+    timestamp: 1700000000000,
+    confidence: 0.9876,
+    sources: ['chainlink', 'redstone'],
+  }
+
+  it('default', () => {
+    const { container } = render(<PriceCard price={fixedPrice} />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('isLive', () => {
+    const { container } = render(<PriceCard price={fixedPrice} isLive />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('isStale', () => {
+    const { container } = render(<PriceCard price={fixedPrice} isStale />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('hasAlert', () => {
+    const { container } = render(<PriceCard price={fixedPrice} hasAlert />)
+    expect(container.firstChild).toMatchSnapshot()
+  })
+})
