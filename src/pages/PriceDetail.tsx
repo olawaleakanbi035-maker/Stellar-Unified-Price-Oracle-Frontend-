@@ -79,7 +79,7 @@ export function PriceDetail() {
     <div>
       <button
         onClick={() => navigate('/')}
-        className="mb-6 text-sm text-gray-500 hover:text-gray-300 transition-colors flex items-center gap-1 cursor-pointer"
+        className="mb-6 text-sm text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors flex items-center gap-1 cursor-pointer"
         type="button"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -89,7 +89,7 @@ export function PriceDetail() {
       </button>
 
       {priceData && (
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 mb-8">
           <div className="flex items-start justify-between mb-6">
             <div>
               <div className="flex items-center gap-3 mb-1">
@@ -101,7 +101,7 @@ export function PriceDetail() {
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                 )}
               </div>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-400 dark:text-gray-500">
                 Last updated: {formatTimestamp(priceData.timestamp)}
               </p>
             </div>
@@ -114,7 +114,7 @@ export function PriceDetail() {
             </div>
           </div>
 
-          <div className="text-5xl font-bold text-white mb-4 font-mono tracking-tight">
+          <div className="text-5xl font-bold text-gray-900 dark:text-white mb-4 font-mono tracking-tight">
             ${formatPrice(priceData.price)}
           </div>
 
