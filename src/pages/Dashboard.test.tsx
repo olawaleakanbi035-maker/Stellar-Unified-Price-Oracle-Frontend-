@@ -4,6 +4,21 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { Dashboard } from './Dashboard'
 
+vi.mock('@tanstack/react-virtual', () => ({
+  useVirtualizer: ({ count, estimateSize }: { count: number; estimateSize: (i: number) => number }) => {
+    const items = Array.from({ length: count }, (_, i) => {
+      const size = estimateSize(i)
+      const start = i * size
+      return { key: i, index: i, start, end: start + size, size, lane: 0 }
+    })
+    return {
+      getVirtualItems: () => items,
+      getTotalSize: () => items.reduce((total, item) => total + item.size, 0),
+      measure: () => {},
+    }
+  },
+}))
+
 afterEach(cleanup)
 
 vi.mock('../context/PriceContext', () => ({
@@ -414,5 +429,79 @@ describe('Dashboard', () => {
     expect(screen.getByText('ETH/USD')).toBeInTheDocument()
     expect(screen.getByText('BTC/USD')).toBeInTheDocument()
     expect(screen.queryByText('XLM/USD')).not.toBeInTheDocument()
+  })
+})
+
+describe('snapshots', () => {
+  it('loading', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>,
+    )
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('error', async () => {
+    const { usePriceContext } = await import('../context/PriceContext')
+    vi.mocked(usePriceContext).mockReturnValue({
+      prices: [],
+      pricesLoading: false,
+      pricesError: 'Failed to fetch prices',
+      pricesValidating: false,
+      livePrices: new Map(),
+      wsStatus: 'disconnected',
+      refetchPrices: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
+    })
+    const { container } = render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>,
+    )
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('empty', async () => {
+    const { usePriceContext } = await import('../context/PriceContext')
+    vi.mocked(usePriceContext).mockReturnValue({
+      prices: [],
+      pricesLoading: false,
+      pricesError: null,
+      pricesValidating: false,
+      livePrices: new Map(),
+      wsStatus: 'disconnected',
+      refetchPrices: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
+    })
+    const { container } = render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>,
+    )
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('with data', async () => {
+    const { usePriceContext } = await import('../context/PriceContext')
+    vi.mocked(usePriceContext).mockReturnValue({
+      prices: mockPrices,
+      pricesLoading: false,
+      pricesError: null,
+      pricesValidating: false,
+      livePrices: new Map(),
+      wsStatus: 'disconnected',
+      refetchPrices: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
+    })
+    const { container } = render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>,
+    )
+    expect(container.firstChild).toMatchSnapshot()
   })
 })
